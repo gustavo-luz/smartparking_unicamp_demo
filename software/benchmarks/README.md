@@ -48,6 +48,11 @@ YOLO (TFLite)
 python compute_metrics.py --model yolov11m_tflite     --base_dir_labeled_data ../../assets/labels     --base_dir_inference_csvs ../../assets/results/results_yolo_tflite/yolov11m_tflite     --base_dir_results ../../assets/results/results_yolo_tflite/yolov11m_tflite
 ```
 
+Efficientdet (TFLite)
+```bash
+python compute_metrics.py --model efficientdetd2lite     --base_dir_labeled_data ../../assets/labels     --base_dir_inference_csvs ../../assets/results/results_efficientdet_tflite/efficientdetd2lite     --base_dir_results ../../assets/results/results_efficientdet_tflite/efficientdetd2lite
+```
+
 This command will compute the evaluation metrics for `my_model`, using the labeled data from `./data/labeled`, inference data from `./data/inference`, and save the results in `./results`.
 
 ## Outputs

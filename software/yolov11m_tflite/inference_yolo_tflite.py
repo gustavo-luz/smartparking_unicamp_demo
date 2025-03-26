@@ -12,7 +12,7 @@ from datetime import datetime
 MODEL = 'yolo11m_float16.tflite'
 IMAGE_DIR = '../../assets/demo_images'
 OUTPUT_DIR = '../../assets/results/results_yolo_tflite/yolov11m_tflite'
-savefigs = 'no' #choose 'no' to not save images and 'debug' to save images
+savefigs = 'debug' #choose 'no' to not save images and 'debug' to save images
 """CFG END"""
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 

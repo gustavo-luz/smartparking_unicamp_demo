@@ -1,8 +1,8 @@
-# YOLO TFLite Inference
+# Efficientdet TFLite Inference
 
 ## Overview
 
-This repository provides a script for running inference using a YOLO model in TensorFlow Lite format. The model is pre-trained on the COCO dataset with an input shape of 640x640. The environment setup follows the same requirements as the EfficientDet models.
+This repository provides a script for running inference using a YOLO model in TensorFlow Lite format. The model is pre-trained on the COCO dataset with an input shape of 448X448. The environment setup follows the same requirements as the YOLO TFLite models.
 
 ## TODOs
 - Add conversion steps for TFLite models following the provided link.
@@ -53,7 +53,7 @@ Before running the script, ensure you have:
 
 ## Script Details
 
-### Main Script: `inference_yolo_tflite.py`
+### Main Script: `inference_edet_lite.py`
 This script processes images using a YOLO TFLite model and outputs results in a CSV file.
 
 **Example demo images**: Available in the [docs folder](../../assets/demo_images), extracted from [CNRPark](http://cnrpark.it/). The dataset includes images in shape 728x1024, but other shapes should also be compatible.
@@ -62,16 +62,16 @@ This script processes images using a YOLO TFLite model and outputs results in a 
 
 Run the script using the following command:
 ```bash
-python3 inference_yolo_tflite.py
+python3 inference_edet_lite.py
 ```
 
 #### Manual Configuration Required Dependng on User Needs
 Before running the script, ensure that the following variables in the script are correctly set according to your needs:
 
 ```python
-MODEL = 'yolo11m_float16.tflite'
+MODEL = 'lite-model_efficientdet_lite2_detection_default_1.tflite'
 IMAGE_DIR = '../../assets/demo_images'
-OUTPUT_DIR = '../../assets/results/results_yolo_tflite/yolov11m_tflite'
+OUTPUT_DIR = '../../assets/results/results_efficientdet_tflite/efficientdetd2lite'
 savefigs = 'debug'  
 ```
 
