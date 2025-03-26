@@ -1,4 +1,4 @@
-# # YOLO Ultralytics Inference
+# YOLO Ultralytics Inference
 
 
 pegar dados de algum lugar e testar,talvez pklot

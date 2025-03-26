@@ -2,10 +2,9 @@
 
 ## Overview
 
-This repository provides a script for running inference using a EfficientDet model in TensorFlow Lite format. The model is pre-trained on the COCO dataset with an input shape of 448X448. The environment setup follows the same requirements as the YOLO TFLite models.
+This repository provides a script for running inference using a YOLO model in TensorFlow Lite format. The model is pre-trained on the COCO dataset with an input shape of 416x416. The environment setup follows an unique setup as this codebase was extracted from [A minimal PyTorch implementation of YOLOv3](https://github.com/eriklindernoren/PyTorch-YOLOv3)
 
 ## TODOs
-- Add conversion steps for TFLite models following the provided link.
 - Provide a script to download demo images instead of distributing third-party images.
 - Cite the source of images in the associated research paper.
 
@@ -19,17 +18,17 @@ Ensure that Python is installed. The script has been tested with Python 3.11.7 a
 
 1. **Create a virtual environment**:
    ```bash
-   python -m venv tfliteenv
+   python -m venv yolov3env
    ```
 
 2. **Activate the virtual environment**:
    - **Windows**:
      ```bash
-     tfliteenv\Scripts\activate
+     yolov3env\Scripts\activate
      ```
    - **macOS/Linux**:
      ```bash
-     source tfliteenv/bin/activate
+     source yolov3env/bin/activate
      ```
 
 3. **Install dependencies**:
@@ -53,7 +52,7 @@ Before running the script, ensure you have:
 
 ## Script Details
 
-### Main Script: `inference_edet_lite.py`
+### Main Script: `inference_yolov3.py`
 This script processes images using a YOLO TFLite model and outputs results in a CSV file.
 
 **Example demo images**: Available in the [docs folder](../../assets/demo_images), extracted from [CNRPark](http://cnrpark.it/). The dataset includes images in shape 728x1024, but other shapes should also be compatible.
@@ -62,17 +61,19 @@ This script processes images using a YOLO TFLite model and outputs results in a 
 
 Run the script using the following command:
 ```bash
-python3 inference_edet_lite.py
+python3 inference_yolov3.py
 ```
 
 #### Manual Configuration Required Dependng on User Needs
 Before running the script, ensure that the following variables in the script are correctly set according to your needs:
 
 ```python
-MODEL = 'lite-model_efficientdet_lite2_detection_default_1.tflite'
-IMAGE_DIR = '../../assets/demo_images'
-OUTPUT_DIR = '../../assets/results/results_efficientdet_tflite/efficientdetd2lite'
-savefigs = 'debug'  
+model_path = "yolov3.cfg"
+weights_path = "yolov3.weights"
+model = models.load_model(model_path, weights_path)
+image_dir = '../../assets/demo_images'
+output_dir = '../../assets/results/results_yolov3/yolov3'
+savefigs = 'debug'
 ```
 
 Make sure `MODEL`, `IMAGE_DIR`, and `OUTPUT_DIR` are correctly defined before executing the script. The `savefigs` variable should be set to `'debug'` if you want to save images or `'no'` if you prefer not to save them.

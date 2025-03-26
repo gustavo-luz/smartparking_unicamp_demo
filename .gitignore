@@ -9,3 +9,6 @@ assets/demo_images/original_1653099659595.jpg
 **/tfliteenv/
 assets/results/results_yolo_ultralytics/yolov8n/batch_20250326T004514/results*.jpg
 **/*.tflite
+**/annotated*.jpg
+**/yolov3env/
+**/yolov3.weights
