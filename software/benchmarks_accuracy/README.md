@@ -1,41 +1,55 @@
-# Smart Parking System with Deep Learning at Unicamp
+# Compute Metrics Script
 
-![System Overview](assets/docs/system_overview.jpg)
+This script computes evaluation metrics for model predictions based on labeled data and inference CSV files.
 
-This repository contains the complete implementation of a real-time smart parking monitoring system using edge computing and deep learning, representing a decade of research iterations at Unicamp. To run the benchmarks outside of the edge device, follow the [Software Implementation](software/README.md)
+## Features
+- Loads labeled data and model predictions
+- Processes data to calculate key evaluation metrics
+- Computes confusion matrix and performance metrics such as accuracy, recall, precision, F1-score, sensitivity, specificity, and balanced accuracy
+- Saves evaluation results as CSV and generates a confusion matrix plot
+- Supports evaluation for all images and separately for images containing at least one vehicle
 
-## 🔗 Quick Links
-- [Software Implementation](software/README.md)
-- [Hardware Documentation](hardware/README.md)
-- [Dataset Information](docs/dataset.md)
+## Requirements
+- **Required Python packages**: `pandas`, `seaborn`, `matplotlib`, `numpy`, `argparse`
+- It is recommended to use the environment from [instructions of yolov8 to yolov11](../yolov8_to_v11/README.md)
 
----
+### Required Files
+Ensure the following files and directories exist before running the script:
+- **Labeled data CSV**: A file named `combined_metrics.csv` inside the `base_dir_labeled_data` directory. This file should contain ground truth labels, including the number of vehicles per image.
+- **Inference CSV files**: The script looks for any `df_individual_metrics*.csv` files recursively in `base_dir_inference_csvs`. Ensure these files contain the predicted number of vehicles per image.
+- **Output directory**: A valid directory path where results will be saved.
 
-## 🛠 Hardware Setup
-For complete hardware instructions, see:  
-[📖 Hardware README](hardware/README.md)
+## Usage
 
-Key components:
-- Raspberry Pi 3B+ configuration
-- Parking totem assembly
-- Power management system
+Run the script with the following arguments:
 
----
+```bash
+python compute_metrics.py --model MODEL_NAME \
+    --base_dir_labeled_data PATH_TO_LABELED_DATA \
+    --base_dir_inference_csvs PATH_TO_INFERENCE_CSVS \
+    --base_dir_results PATH_TO_SAVE_RESULTS
+```
 
-## 💻 Software Implementation
-For detailed software documentation:  
-[📖 Software README](software/README.md)
+### Arguments
+- `--model` : Name of the model
+- `--base_dir_labeled_data` : Path to the directory containing labeled data CSV file (`combined_metrics.csv`)
+- `--base_dir_inference_csvs` : Path to the directory containing inference CSV files
+- `--base_dir_results` : Path to the directory where results will be saved
 
-Main components:
-- Edge inference service
-- LED display controller
-- Monitoring dashboard
+## Example
+YOLO from ultralytics
+```bash
+python compute_metrics.py --model yolov8n     --base_dir_labeled_data ../../assets/labels     --base_dir_inference_csvs ../../assets/results/results_yolo_ultralytics/yolov8n     --base_dir_results ../../assets/results/results_yolo_ultralytics/yolov8n
+```
 
----
+This command will compute the evaluation metrics for `my_model`, using the labeled data from `./data/labeled`, inference data from `./data/inference`, and save the results in `./results`.
 
-## 📥 Installation
-1. Set up hardware ([instructions](hardware/README.md))
-2. Configure software ([guide](software/README.md))
-3. Deploy services ([tutorial](software/deploy/README.md))
+## Outputs
+- `combined_metrics_all_MODEL_NAME.csv` : CSV file with computed evaluation metrics for all images
+- `combined_metrics_cars_only_MODEL_NAME.csv` : CSV file with computed evaluation metrics for images containing at least one vehicle
+- `confusion_matrix_all_MODEL_NAME.png` : Confusion matrix visualization for all images
+- `confusion_matrix_cars_only_MODEL_NAME.png` : Confusion matrix visualization for images containing at least one vehicle
 
----
+### Important Notes
+- If you have multiple batches, ensure that the images were not processed more than once, as the script looks for any files with `df_individual_metrics.csv` recursively in the inference directory.
+- The confusion matrices and metrics are computed for both all images and separately for images that contain at least one vehicle.

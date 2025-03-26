@@ -215,19 +215,6 @@ def perform_inference_post(input_path, output_path, img_,img_object, model,df,ma
             cars = count_cars_post(lines,class_names_dict,mask)
         else:
 
-
-            # # get the model names list
-            # names = model.names
-            # # get the 'car' class id
-            # car_id = list(names)[list(names.values()).index('car')]
-            # truck_id = list(names)[list(names.values()).index('truck')]
-            # # count 'car' objects in the results
-            # boxes = results[0].boxes
-            # car_objects = results[0].boxes.cls.tolist().count(car_id)
-            # truck_objects = results[0].boxes.cls.tolist().count(truck_id)
-            # print(f'\n{boxes}, \n{car_objects} \n\n {truck_objects}')
-            # cars = car_objects + truck_objects
-
             class_names_dict = r.names
             boxes = r.boxes.xywhn.cpu().numpy()  # Get boxes in xyxy format
             confidences = r.boxes.conf.cpu().numpy()  # Get confidence scores

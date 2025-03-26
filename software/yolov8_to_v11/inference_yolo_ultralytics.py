@@ -33,7 +33,7 @@ def main(model,input_path, output_path,num_splits,mask_type, savefigs='no', remo
     remove_intermediate_txts = False
     show_processed_images = False
 
-    filter_processed_images = 'csv' # 'csv' or 'images' or anything else to dont filter and always process the same images
+    filter_processed_images = 'no' # 'csv' or 'images' or anything else to dont filter and always process the same images
     split_lists = True
     num_splits = num_splits
 
@@ -41,11 +41,7 @@ def main(model,input_path, output_path,num_splits,mask_type, savefigs='no', remo
     print(f'images list: {image_list}')
 
     interactive_mode = True
-    if mask_type == 'post':
-        # currenly the post processing method only works with txt so this should be set to True
-        generate_txt = False
-    elif mask_type == 'pre':
-        generate_txt = False
+    generate_txt = False
 
     if filter_processed_images == 'images':
 
@@ -205,7 +201,7 @@ def main(model,input_path, output_path,num_splits,mask_type, savefigs='no', remo
 if __name__ == '__main__':
     """
     example usage:
-    python inference_preprocessed_mask_768_1024.py --model yolov10x --input_path ../assets/data/masked_768_1024 --output_path ../assets/results/results_preprocessed_mask_original_768_1024_yolov10x --savefigs debug --num_splits 1 --mask_type post
+    python3 inference_yolo_ultralytics.py --input_path ../../assets/demo_images --output_path ../../assets/results/results_yolo_ultralytics/yolov8n --savefigs debug --model yolov8n
     """
     parser = argparse.ArgumentParser(description="Process some images.")
     parser.add_argument('--model', type=str, required=True, help='Model name')
