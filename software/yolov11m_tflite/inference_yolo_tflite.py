@@ -7,6 +7,15 @@ import os
 import psutil
 from datetime import datetime
 
+"""CFG START"""
+
+MODEL = 'yolo11m_float16.tflite'
+IMAGE_DIR = '../../assets/demo_images'
+OUTPUT_DIR = '../../assets/results/results_yolo_tflite/yolov11m_tflite'
+savefigs = 'no' #choose 'no' to not save images and 'debug' to save images
+"""CFG END"""
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+
 def nms(boxes, scores, iou_threshold=0.5):
     x = boxes[:, 0]
     y = boxes[:, 1]
@@ -36,15 +45,6 @@ def nms(boxes, scores, iou_threshold=0.5):
         order = order[inds + 1]
 
     return keep
-
-MODEL = 'yolo11m_float16.tflite'
-IMAGE_DIR = '../../assets/demo_images'
-OUTPUT_DIR = '../../assets/results/results_yolo_tflite/yolov11m_tflite'
-os.makedirs(OUTPUT_DIR, exist_ok=True)
-
-image_files = [f for f in os.listdir(IMAGE_DIR) if f.endswith(('.jpg', '.png'))]
-if not image_files:
-    raise ValueError("No images found in the specified directory.")
 
 def process_data(input_data):
     global input_details
@@ -155,6 +155,12 @@ def draw_boxes_on_image(image, boxes, img_width, img_height):
         draw.rectangle([left, top, right, bottom], outline="red", width=3)
     return image
 
+""" Inference """
+image_files = [f for f in os.listdir(IMAGE_DIR) if f.endswith(('.jpg', '.png'))]
+if not image_files:
+    raise ValueError("No images found in the specified directory.")
+
+
 interpreter = Interpreter(MODEL, num_threads=4)
 interpreter.allocate_tensors()
 input_details = interpreter.get_input_details()
@@ -167,7 +173,7 @@ mask = np.array(mask)
 now = datetime.now()
 filename_timestamp = now.strftime("%Y%m%dT%H%M%S")
 output_path = f'{OUTPUT_DIR}/batch_{filename_timestamp}'
-output_csv_path = os.path.join(output_path, f'batch_{filename_timestamp}')
+output_csv_path = output_path
 output_csv_file = os.path.join(output_csv_path, f'df_individual_metrics_{filename_timestamp}.csv')
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -186,15 +192,15 @@ for image_file in image_files:
         inference_time = time.time() - pre_inference_time
         total_processing_time = time.time() - start_time
 
+        if savefigs == 'debug':
+            # Draw bounding boxes on the original image
+            annotated_image = draw_boxes_on_image(img_object.copy(), boxes, img_width, img_height)
 
-        # Draw bounding boxes on the original image
-        annotated_image = draw_boxes_on_image(img_object.copy(), boxes, img_width, img_height)
-
-        # Save the annotated image
-        image_name = f'annotated_image_{MODEL[:-7]}{image_file}'
-        annotated_image_path = os.path.join(output_csv_path, image_name)
-        annotated_image.save(annotated_image_path)
-        print(f"Annotated image saved to {annotated_image_path}")
+            # Save the annotated image
+            image_name = f'annotated_image_{MODEL[:-7]}{image_file}'
+            annotated_image_path = os.path.join(output_csv_path, image_name)
+            annotated_image.save(annotated_image_path)
+            print(f"Annotated image saved to {annotated_image_path}")
 
         cpu_usage = psutil.cpu_percent()
         memory_info = psutil.virtual_memory()

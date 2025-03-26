@@ -29,8 +29,7 @@ For detailed software documentation go to
 [📖 Software Documentation](software/README.md)
 
 Key components:
-- A benchmark of different deep learning models for accuracy that can be executed anywhere
-- A benchmark of different deep learning models for measuring time that can be executed anywhere, but in our case was tested at a Raspberry Pi 3 B+
+- A benchmark of different deep learning models for accuracy and inference time
 
 ---
 
