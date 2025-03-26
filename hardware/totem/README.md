@@ -5,7 +5,7 @@
 todo: adicionar como montar do 0, foto do circuito, o que estava lá no artigo anteriormente, pode ser detalhista aqui.
 
 ## Circuit Overview
-![Figure 4: Totem Circuit Diagram](../../docs/totem_schematic.png)
+![Figure 4: Totem Circuit Diagram](../../assets/docs/totem_schematic.png)
 
 The totem features two LED panels (front and back) displaying real-time parking availability. The system operates as follows:
 
