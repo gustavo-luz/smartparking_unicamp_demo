@@ -1,6 +1,7 @@
 # Compute Metrics Script
 
 This script computes evaluation metrics for model predictions based on labeled data and inference CSV files.
+Before running it, ensure to have executed one of the codes in each of the folders corresponding to the desired model.
 
 ## Features
 - Loads labeled data and model predictions
@@ -40,6 +41,11 @@ python compute_metrics.py --model MODEL_NAME \
 YOLO from ultralytics
 ```bash
 python compute_metrics.py --model yolov8n     --base_dir_labeled_data ../../assets/labels     --base_dir_inference_csvs ../../assets/results/results_yolo_ultralytics/yolov8n     --base_dir_results ../../assets/results/results_yolo_ultralytics/yolov8n
+```
+
+YOLO (TFLite)
+```bash
+python compute_metrics.py --model yolov11m_tflite     --base_dir_labeled_data ../../assets/labels     --base_dir_inference_csvs ../../assets/results/results_yolo_tflite/yolov11m_tflite     --base_dir_results ../../assets/results/results_yolo_tflite/yolov11m_tflite
 ```
 
 This command will compute the evaluation metrics for `my_model`, using the labeled data from `./data/labeled`, inference data from `./data/inference`, and save the results in `./results`.

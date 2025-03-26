@@ -6,4 +6,6 @@ assets/demo_images/original_1653099659595.jpg
 **/__pycache__/
 **/yolo*.pt
 **/yoloultralyticsenv/
+**/tfliteenv/
 assets/results/results_yolo_ultralytics/yolov8n/batch_20250326T004514/results*.jpg
+**/*.tflite

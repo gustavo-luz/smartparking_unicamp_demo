@@ -44,7 +44,7 @@ def process_data(combined_df, base_labeled_df):
     
     merged_df.to_csv(os.path.join('./', 'merged_metrics.csv'), index=False)
     merged_df['predicted_background'] = max_spots - merged_df['predicted_cars']
-    if 'real_cars_x' or 'real_cars_y' in merged_df.columns:
+    if 'real_cars_x' in merged_df.columns or 'real_cars_y' in merged_df.columns:
         merged_df['real_cars'] = merged_df['real_cars_y']
 
     merged_df['real_background'] = max_spots - merged_df['real_cars']
