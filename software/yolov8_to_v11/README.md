@@ -21,15 +21,49 @@ The files here correspond to performing benchmarks with different deep learning 
 
 ---
 
-## Prerequisites
 
-Ensure that Python is installed on your system. This script has been tested with Python 3.11.7 and Python. Required libraries can be installed using:
+## Requirements
+### Python & Virtual Environment
 
-```
-pip install -r requirements.txt
-```
+Before running the script, ensure that Python is installed on your system. The script has been tested with Python 3.11.7 and pip 23.2.1. It is recommended to use a virtual environment to manage dependencies and avoid conflicts with other Python packages on your system.
 
-Another prerequisite is a file named maskmask_original_img_768_1024_bw.png that will serve as a guideline to select regions where to perform counting. We provide an all black mask, so every vehicle is counted. To create a custom mask you can use the base image as example and select and paint the desire counting region as black only, leaving the rest white. This can be done with image editing tools like GIMP using the free selection tool.
+### Creating a Virtual Environment
+
+To create and activate a virtual environment, follow these steps:
+
+1. **Create the virtual environment**:  
+   In the terminal, navigate to the project directory and run:
+   ```bash
+   python -m venv yoloultralyticsenv
+   ```
+   This will create a directory named `yoloultralyticsenv` in your project directory, which will contain the isolated Python environment.
+
+2. **Activate the virtual environment**:
+   - **macOS/Linux**:
+     ```bash
+     source yoloultralyticsenv/bin/activate
+     ```
+
+   Once activated, the terminal prompt should change to indicate that the virtual environment is active, e.g., `(yoloultralyticsenv)`.
+
+3. **Install required libraries**:  
+   With the virtual environment active, run the following command to install all necessary dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+   This will install the required libraries
+
+4. **Deactivate the virtual environment**:  
+   After you're done working, you can deactivate the virtual environment by running:
+   ```bash
+   deactivate
+   ```
+
+### Required File
+
+Ensure that you have the following file before running the script:
+- **`maskmask_original_img_768_1024_bw.png`**: This file serves as a guideline to select regions where to perform counting. We provide an all-black mask, so every vehicle will be counted. To create a custom mask, you can a base image as an example. You can select and paint the desired counting region as black using image editing tools like GIMP with the free selection tool. The rest of the image should be left white.
 
 ---
 
@@ -38,9 +72,9 @@ Another prerequisite is a file named maskmask_original_img_768_1024_bw.png that 
 1. **inference_yolo_ultralytics.py**  
    This script processes images, runs inference using a YOLO model, and returns results in a csv.
 
-   Example test images can be found on [docs folder](../../assets/demo_images). The images used for the paper are in shape 728x1024 but other shapes should also be compatible.
+   Example test images can be found on [docs folder](../../assets/demo_images) extracted from [CNRPark](http://cnrpark.it/) named CNR-EXT_FULL_IMAGE_1000x750.tar (1.1 GB) and are from the under CNR-EXT_FULL_IMAGE_1000x750/FULL_IMAGE_1000x750/SUNNY/2015-11-12/camera1. The images used for the reference paper are in shape 728x1024 but other shapes should also be compatible.
 
-
+TODO: criar um script que baixa as fotos de demonstração e colocar em todos os readmes, pra não distribuir fotos de terceiros. add citação no artigo
 
 ## Running the Script
 
@@ -108,6 +142,6 @@ If saving figures is enabled (`--savefigs debug` or `--savefigs partial`), this 
 
 ### Metrics: 
 
-To compute the result you will need the standardized script that can be found at [software/benchmarks_accuracy](../benchmarks_accuracy/compute_metrics.py)
+To compute the result you will need the standardized script that can be found at [software/benchmarks_accuracy](../benchmarks_accuracy/README.md)
 
 ---

@@ -29,20 +29,27 @@ def load_data(base_dir_labeled_data, base_dir_inference_csvs):
 
 def process_data(combined_df, base_labeled_df):
     """Process data and compute evaluation metrics."""
-    combined_df['image_name'] = 'croped_' + combined_df['image_name']
+    print(base_labeled_df['image_name'].iloc[0])
+    if 'croped_' in base_labeled_df['image_name'].iloc[0]:
+        combined_df['image_name'] = 'croped_' + combined_df['image_name']
+        max_spots = 16
+    else:
+        max_spots = max(combined_df['predicted_cars'])
+        print(f'\n Max spots: {max_spots}\n')
     combined_df.rename(columns={'predicted_persons': 'predicted_cars', 'inference_time':'processing_time'}, inplace=True)
-    
+    print(combined_df,combined_df.columns)
+    print(base_labeled_df,base_labeled_df.columns)
     combined_df['image_name'] = combined_df['image_name'].str.replace('.jpg', '')
     merged_df = pd.merge(combined_df, base_labeled_df[['image_name', 'real_cars']], on='image_name', how='inner')
     
-    max_spots = 16
+    merged_df.to_csv(os.path.join('./', 'merged_metrics.csv'), index=False)
     merged_df['predicted_background'] = max_spots - merged_df['predicted_cars']
     if 'real_cars_x' or 'real_cars_y' in merged_df.columns:
         merged_df['real_cars'] = merged_df['real_cars_y']
 
     merged_df['real_background'] = max_spots - merged_df['real_cars']
-    # merged_df.to_csv(os.path.join('./', 'merged_metrics.csv'), index=False)
-    
+    merged_df.to_csv(os.path.join('./', 'merged_metrics.csv'), index=False)
+    print(merged_df)
     merged_df = calculate_metrics(merged_df)
 
 
@@ -50,17 +57,29 @@ def process_data(combined_df, base_labeled_df):
 
 def calculate_metrics(df):
     """Calculate classification metrics."""
-    df['TN'] = df.apply(lambda row: min(row['predicted_cars'], row['real_cars']), axis=1)
-    df['TP'] = df.apply(lambda row: min(row['predicted_background'], row['real_background']), axis=1)
-    df['FN'] = df.apply(lambda row: max(row['predicted_cars'] - row['real_cars'], 0), axis=1)
-    df['FP'] = df.apply(lambda row: abs(row['predicted_background'] - row['real_background']), axis=1)
+    # True Positives: Correctly predicted cars
+    df['TP'] = df.apply(lambda row: min(row['predicted_cars'], row['real_cars']), axis=1)
     
+    # False Negatives: Actual cars but model predicted none
+    df['FN'] = df.apply(lambda row: max(row['real_cars'] - row['predicted_cars'], 0), axis=1)
+    
+    # False Positives: Model predicted cars but there were none
+    df['FP'] = df.apply(lambda row: max(row['predicted_cars'] - row['real_cars'], 0), axis=1)
+    
+    # True Negatives: Correctly predicted no cars (background)
+    df['TN'] = df.apply(lambda row: min(row['predicted_background'], row['real_background']), axis=1)
+    
+    # Accuracy, recall, precision, F1 score
     df['accuracy'] = (df['TP'] + df['TN']) / (df['TP'] + df['TN'] + df['FP'] + df['FN'])
     df['recall'] = df['TP'] / (df['TP'] + df['FN'])
     df['precision'] = df['TP'] / (df['TP'] + df['FP'])
     df['f1_score'] = 2 * ((df['precision'] * df['recall']) / (df['precision'] + df['recall']))
+    
+    # Sensitivity and specificity
     df['sensitivity'] = df['TP'] / (df['TP'] + df['FN'])
     df['specificity'] = df['TN'] / (df['TN'] + df['FP'])
+    
+    # Balanced accuracy
     df['bal_acc'] = (df['sensitivity'] + df['specificity']) / 2
     
     return df
@@ -91,6 +110,7 @@ def save_confusion_matrix(df, base_dir_results, model, suffix=""):
     total_samples = len(df)
     
     confusion_matrix = np.array([[total_TP, total_FP], [total_FN, total_TN]])
+    print(confusion_matrix)
     group_names = ['TP', 'FP', 'FN', 'TN']
     group_counts = [f"{value}" for value in confusion_matrix.flatten()]
     group_percentages = [f"{value:.2%}" for value in confusion_matrix.flatten() / np.sum(confusion_matrix)]
