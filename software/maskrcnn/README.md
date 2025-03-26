@@ -1,10 +1,10 @@
-# YOLOV3 Darknet Pytorch Inference
+# Mask R-CNN TensorFlow 2.0 Inference
 
 ## Overview
 
-This repository provides a script for running inference using a YOLO model in TensorFlow Lite format. The model is pre-trained on the COCO dataset with an input shape of 416x416. The environment setup follows an unique setup as this codebase was extracted from [A minimal PyTorch implementation of YOLOv3](https://github.com/eriklindernoren/PyTorch-YOLOv3)
+This repository provides a script for running inference using a Mask R-CNN. The model is pre-trained on the COCO dataset with an input shape of 1024x1024. The environment setup follows an unique setup as this codebase was extracted from [Mask R-CNN for Object Detection and Segmentation using TensorFlow 2.0](https://github.com/eriklindernoren/PyTorch-YOLOv3)
 
-More info of this version at https://pjreddie.com/darknet/yolo/ and https://smartcampus.prefeitura.unicamp.br/pub/artigos_relatorios/PFG_Joao_Victor_Estacionamento_Inteligente.pdf
+This was not possible to execute at the Raspberry Pi 3B+.
 
 ## TODOs
 - Provide a script to download demo images instead of distributing third-party images.
@@ -14,23 +14,18 @@ More info of this version at https://pjreddie.com/darknet/yolo/ and https://smar
 
 ## Requirements
 ### Python & Virtual Environment
-Ensure that Python is installed. The script has been tested with Python 3.11.7 and pip 23.2.1. Using a virtual environment is recommended to manage dependencies and prevent conflicts.
+Ensure that Python is installed. The script has been tested with Python 3.6.13 and pip 21.2.2. Using a virtual environment is recommended to manage dependencies and prevent conflicts. To manage it easier, we used conda for it. If you are not fammiliar with conda read [Getting started with conda](https://docs.conda.io/projects/conda/en/stable/user-guide/getting-started.html) first
 
 ### Setting Up a Virtual Environment
 
 1. **Create a virtual environment**:
    ```bash
-   python -m venv yolov3env
+   conda create -n condamaskenv36 python=3.6.13
    ```
 
 2. **Activate the virtual environment**:
-   - **Windows**:
      ```bash
-     yolov3env\Scripts\activate
-     ```
-   - **macOS/Linux**:
-     ```bash
-     source yolov3env/bin/activate
+     conda activate condamaskenv36
      ```
 
 3. **Install dependencies**:
@@ -40,7 +35,7 @@ Ensure that Python is installed. The script has been tested with Python 3.11.7 a
 
 4. **Deactivate the virtual environment**:
    ```bash
-   deactivate
+   conda deactivate
    ```
 
 ---
@@ -54,7 +49,7 @@ Before running the script, ensure you have:
 
 ## Script Details
 
-### Main Script: `inference_yolov3.py`
+### Main Script: `inference_maskrcnn.py`
 This script processes images using a YOLO TFLite model and outputs results in a CSV file.
 
 **Example demo images**: Available in the [docs folder](../../assets/demo_images), extracted from [CNRPark](http://cnrpark.it/). The dataset includes images in shape 728x1024, but other shapes should also be compatible.
@@ -63,22 +58,21 @@ This script processes images using a YOLO TFLite model and outputs results in a 
 
 Run the script using the following command:
 ```bash
-python3 inference_yolov3.py
+python3 inference_maskrcnn.py
 ```
 
 #### Manual Configuration Required Dependng on User Needs
 Before running the script, ensure that the following variables in the script are correctly set according to your needs:
 
 ```python
-model_path = "yolov3.cfg"
-weights_path = "yolov3.weights"
-model = models.load_model(model_path, weights_path)
-image_dir = '../../assets/demo_images'
-output_dir = '../../assets/results/results_yolov3/yolov3'
-savefigs = 'debug'
+model = mrcnn.model.MaskRCNN(mode="inference", config=SimpleConfig(), model_dir=os.getcwd())
+model.load_weights(filepath="mask_rcnn_coco.h5", by_name=True)
+input_dir = '../../assets/demo_images'
+OUTPUT_DIR = '../../assets/results/results_maskrcnn/markrcnn'
+savefigs = 'debug' 
 ```
 
-Make sure `MODEL`, `IMAGE_DIR`, and `OUTPUT_DIR` are correctly defined before executing the script. The `savefigs` variable should be set to `'debug'` if you want to save images or `'no'` if you prefer not to save them.
+Make sure `MODEL`, `input_dir`, and `OUTPUT_DIR` are correctly defined before executing the script. The `savefigs` variable should be set to `'debug'` if you want to save images or `'no'` if you prefer not to save them.
 
 
 

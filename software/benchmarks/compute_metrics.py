@@ -18,8 +18,9 @@ def load_data(base_dir_labeled_data, base_dir_inference_csvs):
     """Load labeled data and model predictions."""
     base_labeled_df = pd.read_csv(f'{base_dir_labeled_data}/combined_metrics.csv')
     dfs = []
+    # print(base_dir_inference_csvs)
     csv_files = glob.glob(os.path.join(base_dir_inference_csvs, '**', 'df_individual_metrics*.csv'), recursive=True)
-    
+    # print(csv_files)
     for csv_file in csv_files:
         df = pd.read_csv(csv_file)
         dfs.append(df)

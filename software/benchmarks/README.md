@@ -58,6 +58,11 @@ YOLOV3
 python compute_metrics.py --model yolov3   --base_dir_labeled_data ../../assets/labels     --base_dir_inference_csvs ../../assets/results/results_yolov3/yolov3     --base_dir_results ../../assets/results/results_yolov3/yolov3
 ```
 
+Mask R-CNN
+```bash
+python compute_metrics.py --model maskrcnn_tf2 --base_dir_labeled_data ../../assets/labels --base_dir_inference_csvs ../../assets/results/results_maskrcnn_tf2/markrcnn_tf2/ --base_dir_results ../../assets/results/results_maskrcnn_tf2/markrcnn_tf2/
+```
+
 This command will compute the evaluation metrics for `my_model`, using the labeled data from `./data/labeled`, inference data from `./data/inference`, and save the results in `./results`.
 
 ## Outputs

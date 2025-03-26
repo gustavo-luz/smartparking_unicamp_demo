@@ -12,3 +12,5 @@ assets/results/results_yolo_ultralytics/yolov8n/batch_20250326T004514/results*.j
 **/annotated*.jpg
 **/yolov3env/
 **/yolov3.weights
+**/*.h5
+**/output_2015-11-12_1609.jpg
