@@ -1,8 +1,17 @@
 # Smart Parking System with Deep Learning at Unicamp
 
+This repository contains the complete implementation of a real-time smart parking monitoring system using edge computing and deep learning, representing a decade of research iterations at Unicamp.
+
+### Timeline:
 ![System Overview](assets/docs/system_evolution.png)
 
-This repository contains the complete implementation of a real-time smart parking monitoring system using edge computing and deep learning, representing a decade of research iterations at Unicamp. To run the benchmarks outside of the edge device, follow the [Software Implementation](software/README.md)
+
+### Real Time Demonstration Video:
+![System Overview](assets/docs/demo_system.gif)
+
+[Full video link](https://youtu.be/7rofjEfX5fA)
+
+---
 
 ## 🛠 Hardware Setup
 For complete hardware instructions go to 

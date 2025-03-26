@@ -142,6 +142,6 @@ If saving figures is enabled (`--savefigs debug` or `--savefigs partial`), this 
 
 ### Metrics: 
 
-To compute the result you will need the standardized script that can be found at [software/benchmarks_accuracy](../benchmarks_accuracy/README.md)
+To compute the result you will need the standardized script that can be found at [software/benchmarks](../benchmarks/README.md)
 
 ---
