@@ -32,11 +32,19 @@ def process_data(combined_df, base_labeled_df):
     """Process data and compute evaluation metrics."""
     print(base_labeled_df['image_name'].iloc[0])
     if 'croped_' in base_labeled_df['image_name'].iloc[0]:
-        combined_df['image_name'] = 'croped_' + combined_df['image_name']
         max_spots = 16
+        print(f'max spots is set to IC2 parking: {max_spots}')
+        input_continue = input('Do you want to continue? (y/n): ')
+        if input_continue.lower() != 'y':
+            exit()
+        combined_df['image_name'] = 'croped_' + combined_df['image_name']
+        
     else:
         max_spots = max(combined_df['predicted_cars'])
-        print(f'\n Max spots: {max_spots}\n')
+        print(f'max spots is set to: {max_spots}')
+        input_continue = input('Do you want to continue? (y/n): ')
+        if input_continue.lower() != 'y':
+            exit()
     combined_df.rename(columns={'predicted_persons': 'predicted_cars', 'inference_time':'processing_time'}, inplace=True)
     print(combined_df,combined_df.columns)
     print(base_labeled_df,base_labeled_df.columns)
@@ -58,18 +66,27 @@ def process_data(combined_df, base_labeled_df):
 
 def calculate_metrics(df):
     """Calculate classification metrics."""
-    # True Positives: Correctly predicted cars
-    df['TP'] = df.apply(lambda row: min(row['predicted_cars'], row['real_cars']), axis=1)
+
+    # df['TP'] = df.apply(lambda row: min(row['predicted_background'], row['real_background']), axis=1)
+
+    # df['FN'] = df.apply(lambda row: max(row['predicted_cars'] - row['real_cars'], 0), axis=1)
+
+    # df['FP'] = df.apply(lambda row: abs(row['predicted_background'] - row['real_background']), axis=1)
     
-    # False Negatives: Actual cars but model predicted none
-    df['FN'] = df.apply(lambda row: max(row['real_cars'] - row['predicted_cars'], 0), axis=1)
-    
-    # False Positives: Model predicted cars but there were none
-    df['FP'] = df.apply(lambda row: max(row['predicted_cars'] - row['real_cars'], 0), axis=1)
-    
-    # True Negatives: Correctly predicted no cars (background)
-    df['TN'] = df.apply(lambda row: min(row['predicted_background'], row['real_background']), axis=1)
-    
+    # df['TN'] = df.apply(lambda row: min(row['predicted_cars'], row['real_cars']), axis=1)
+
+
+    df['TP'] = df.apply(lambda row: min(row['predicted_background'], row['real_background']), axis=1)
+    df['FN'] = df.apply(lambda row: max(row['predicted_cars'] - row['real_cars'], 0), axis=1)
+    df['FP'] = df.apply(lambda row: abs(row['predicted_background'] - row['real_background']), axis=1)
+    df['TN'] = df.apply(lambda row: min(row['predicted_cars'], row['real_cars']), axis=1)
+
+    # df['TP'] = df.apply(lambda row: min(row['predicted_background'], row['real_background']), axis=1)
+    # df['TN'] = df.apply(lambda row: min(row['predicted_cars'], row['real_cars']), axis=1)
+    # df['FP'] = df.apply(lambda row: max(row['predicted_background'] - row['real_background'], 0), axis=1)
+    # df['FN'] = df.apply(lambda row: max(row['real_background'] - row['predicted_background'], 0), axis=1)
+
+        
     # Accuracy, recall, precision, F1 score
     df['accuracy'] = (df['TP'] + df['TN']) / (df['TP'] + df['TN'] + df['FP'] + df['FN'])
     df['recall'] = df['TP'] / (df['TP'] + df['FN'])
@@ -89,6 +106,25 @@ def summarize_metrics(df, base_dir_results, model, suffix=""):
     """Generate summary metrics and save as CSV."""
     filename_suffix = f"_{suffix}" if suffix else ""
     
+    # Calculate processing time metrics while discarding first 2 times
+    processing_times = df['processing_time'].iloc[2:]  # Skip first 2 entries
+    avg_processing_time = processing_times.mean()
+    std_processing_time = processing_times.std()
+    
+    # Calculate metrics
+    avg_bal_acc = df['bal_acc'].mean()
+    
+    # Create formatted strings
+    bal_acc_percent = f"{avg_bal_acc * 100:.2f}%"
+    
+    # Milliseconds formatting
+    avg_processing_ms = avg_processing_time * 1000
+    std_processing_ms = std_processing_time * 1000
+    processing_time_ms_str = f"{avg_processing_ms:.0f} ± {std_processing_ms:.1f} ms"
+    
+    # Seconds formatting
+    processing_time_sec_str = f"{avg_processing_time:.3f} ± {std_processing_time:.3f} s"
+
     summary_data = {
         'number_images': [len(df)],
         'average_accuracy': [df['accuracy'].mean()],
@@ -96,9 +132,18 @@ def summarize_metrics(df, base_dir_results, model, suffix=""):
         'average_precision': [df['precision'].mean()],
         'average_recall': [df['recall'].mean()],
         'average_f1': [df['f1_score'].mean()],
+        'average_processing_time_seconds': [avg_processing_time],
+        'std_processing_time_seconds': [std_processing_time],
+        'balanced_accuracy_percentage': [bal_acc_percent],
+        'processing_time_ms_formatted': [processing_time_ms_str],
+        'processing_time_sec_formatted': [processing_time_sec_str]
     }
+    
     summary_df = pd.DataFrame(summary_data)
     print(summary_df)
+
+    print(f"\n Processing time: {processing_time_sec_str}\n")
+    print(f"\n Balanced accuracy: {bal_acc_percent}\n")
     summary_df.to_csv(os.path.join(base_dir_results, f'summary_metrics{filename_suffix}_{model}.csv'), index=False)
 
 def save_confusion_matrix(df, base_dir_results, model, suffix=""):

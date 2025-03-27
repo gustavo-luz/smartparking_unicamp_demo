@@ -14,3 +14,8 @@ assets/results/results_yolo_ultralytics/yolov8n/batch_20250326T004514/results*.j
 **/yolov3.weights
 **/*.h5
 **/output_2015-11-12_1609.jpg
+**/influx_viewer_prod.ipynb
+**/token*.txt
+**/original_*.jpg
+assets/original/
+assets/results/

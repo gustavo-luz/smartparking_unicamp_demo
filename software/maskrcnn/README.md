@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository provides a script for running inference using a Mask R-CNN. The model is pre-trained on the COCO dataset with an input shape of 1024x1024. The environment setup follows an unique setup as this codebase was extracted from [Mask R-CNN for Object Detection and Segmentation using TensorFlow 2.0](https://github.com/eriklindernoren/PyTorch-YOLOv3)
+This repository provides a script for running inference using a Mask R-CNN. The model is pre-trained on the COCO dataset with an input shape of 1024x1024. The environment setup follows an unique setup as this codebase was extracted from [Mask R-CNN for Object Detection and Segmentation using TensorFlow 2.0](https://github.com/ahmedfgad/Mask-RCNN-TF2/tree/master)
 
 This was not possible to execute at the Raspberry Pi 3B+.
 
@@ -50,7 +50,7 @@ Before running the script, ensure you have:
 ## Script Details
 
 ### Main Script: `inference_maskrcnn.py`
-This script processes images using a YOLO TFLite model and outputs results in a CSV file.
+This script processes images using a Mask R-CNN model and outputs results in a CSV file.
 
 **Example demo images**: Available in the [docs folder](../../assets/demo_images), extracted from [CNRPark](http://cnrpark.it/). The dataset includes images in shape 728x1024, but other shapes should also be compatible.
 

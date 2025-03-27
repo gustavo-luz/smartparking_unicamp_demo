@@ -37,7 +37,8 @@ os.makedirs(output_csv_path, exist_ok=True)
 CAR_CLASS_ID = 2
 
 
-with Image.open('mask_original_img_768_1024_bw.png') as mask:
+# with Image.open('mask_original_img_768_1024_bw.png') as mask:
+with Image.open('mask_original_img_416_416_bw.png') as mask:
     # mask = mask.resize((640, 640))
     mask = np.array(mask)
 
@@ -74,46 +75,82 @@ def nms(boxes, scores, iou_threshold=0.5):
     return keep
 
 
-def detection_matrix_modified(x,y,mask, img_width, img_height):
+def detection_matrix_modified(x, y, mask, img_width, img_height):
+    """
+    Checks if a point (x, y) is inside the given binary mask.
+
+    Parameters:
+        - x, y: Coordinates of the point (bounding box center)
+        - mask: Binary mask (numpy array) where 255 is the area of interest
+        - img_width, img_height: Original image dimensions
+    Returns:
+        - True if the point is inside the mask, False otherwise.
+    """
+
     if len(mask.shape) == 3:
-        mask = mask[:, :, 0]  # Use the first channel if it's multi-channel
-    
-    # Get original mask dimensions
+        mask = mask[:, :, 0]  # Convert multi-channel mask to single-channel
+
+    # Get mask dimensions
     mask_height, mask_width = mask.shape[:2]
-    image_size = 416  # Image is resized to 640x640
+    yolo_image_size = 416  # Make sure this matches your YOLO input size
 
-    scale_x =  mask_height / image_size
-    scale_y = mask_width / image_size
+    # Compute scaling factors
+    scale_x = mask_width / yolo_image_size  # Width scaling
+    scale_y = mask_height / yolo_image_size  # Height scaling
 
-    # scale_x =  mask_width / image_size
-    # scale_y = mask_height / image_size
-
+    # Map bounding box center to the mask space
     x_mask = int(x * scale_x)
     y_mask = int(y * scale_y)
 
-    # print(f"\n points are {x},{y} \n mask shape is {mask.shape}\n mask_x = {x_mask}, mask_y = {y_mask}")
-    pixel_value = mask[int(y_mask),int(x_mask)]#mask[int(y),int(x)]
-    # pixel_value = mask[int(x_mask),int(y_mask)]#mask[int(y),int(x)]
-    print(f"\n points are {x},{y} \n pixel value: {pixel_value} and mask \n mask_x = {x_mask}, mask_y = {y_mask}")
+    # Ensure coordinates are within bounds
+    x_mask = min(max(x_mask, 0), mask_width - 1)
+    y_mask = min(max(y_mask, 0), mask_height - 1)
+
+    # Get the pixel value from the mask
+    pixel_value = mask[y_mask, x_mask]
+
+    print(f"\nPoint: (x={x}, y={y}) -> Mapped to Mask: (x={x_mask}, y={y_mask})")
+    print(f"Pixel Value: {pixel_value}")
+
     if pixel_value == 255:
-        print("The point is outside the mask.")
+        print("The center of the bounding box is outside the mask.")
         return False
     else:
-        print("The point is inside the mask.")
+        print("The center of the bounding box is inside the mask.")
         return True
 
-# Function to count cars inside the mask
+
 def count_cars_post(boxes, mask, img_width, img_height):
+    """
+    Counts the number of cars (class ID 2) inside the mask.
+
+    Parameters:
+        - boxes: List of detected objects in YOLOv3 format [x_min, y_min, x_max, y_max, confidence, class_id]
+        - mask: Binary mask (numpy array) where 255 is the area of interest
+        - img_width, img_height: Original image dimensions
+    Returns:
+        - Number of cars inside the mask
+    """
+
     car_count = 0
-    mask_x, mask_y = mask.shape[:2]
+
     for box in boxes:
+        # Convert box to numpy array (in case it's a list)
+        box = np.array(box)
 
-        box_ = np.array(box)
-        x_center, y_center, width, height = box_
+        # Extract bounding box coordinates
+        x_min, y_min, x_max, y_max = box
 
-        point_inside = detection_matrix_modified(x_center, y_center, mask,416, 416)
+
+        # Compute bounding box center
+        x_center = (x_min + x_max) / 2
+        y_center = (y_min + y_max) / 2
+
+        # Check if the bounding box center is inside the mask
+        point_inside = detection_matrix_modified(x_center, y_center, mask, 416, 416)
         if point_inside:
             car_count += 1
+
     return car_count
 
 # Open the CSV file for writing
@@ -130,9 +167,11 @@ with open(OUTPUT_FILE, mode="w", newline="") as csv_file:
         print(f"image path is {image_path}")
         with Image.open(image_path) as img:
             img = img.resize((416, 416))
-
-            img = np.array(img)            
-
+      
+            img = np.array(img)          
+            # to save resized mask to produce a mask of the same size as the image  
+            # resized_image_path = os.path.join(output_csv_path, f"resized_{image_name}")
+            # cv2.imwrite(resized_image_path, img)   
             # Skip if the image is not loaded successfully
             if img is None:
                 print(f"Error: Unable to load image at {image_path}")

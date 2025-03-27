@@ -1,18 +1,25 @@
 # Compute Metrics Script
 
 This script computes evaluation metrics for model predictions based on labeled data and inference CSV files.
-Before running it, ensure to have executed one of the codes in each of the folders corresponding to the desired model.
+Before running it, ensure to have executed one of the codes in each of the folders corresponding to the desired model:
+
+- [YOLOv8 to YOLOv11](../yolov8_to_v11/)
+- [YOLOv11m (TFLite)](../yolov11m_tflite/)
+- [EfficientDet-D2 Lite](../efficientdet_lite/)
+- [YOLOv3](../yolov3/)
+- [Mask R-CNN](../maskrcnn/)
 
 ## Features
 - Loads labeled data and model predictions
 - Processes data to calculate key evaluation metrics
 - Computes confusion matrix and performance metrics such as accuracy, recall, precision, F1-score, sensitivity, specificity, and balanced accuracy
+- Computes average inference time and standard deviation
 - Saves evaluation results as CSV and generates a confusion matrix plot
 - Supports evaluation for all images and separately for images containing at least one vehicle
 
 ## Requirements
 - **Required Python packages**: `pandas`, `seaborn`, `matplotlib`, `numpy`, `argparse`
-- It is recommended to use the environment from [instructions of yolov8 to yolov11](../yolov8_to_v11/README.md)
+- It is possible to use the same environment from [instructions of yolov8 to yolov11](../yolov8_to_v11/)
 
 ### Required Files
 Ensure the following files and directories exist before running the script:
