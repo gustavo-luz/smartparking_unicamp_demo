@@ -44,6 +44,8 @@ Ensure that Python is installed. The script has been tested with Python 3.6.13 a
 
 Before running the script, ensure you have:
 - **`mask_original_img_768_1024_bw.png`**: This mask file defines regions where object counting is performed. The default mask is all black, meaning every vehicle will be counted. You can modify it using image editing tools (e.g., GIMP) by selecting and painting the desired regions in black.
+- **Mask R-CNN Model**: The model used for car detection.  
+  - 📥 **Download `mask_rcnn_coco.h5` Pre-Trained model from our Google Drive Folder**: [Link](https://drive.google.com/drive/folders/1D_88IY0JBwUdi3EKsSAzLj1hxN6SJGit?usp=sharing)  
 
 ---
 

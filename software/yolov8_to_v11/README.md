@@ -1,12 +1,6 @@
 # YOLO Ultralytics Inference
 
 
-pegar dados de algum lugar e testar,talvez pklot
-todo: entrar no pi e descobrir versão certinha do python e das libs que estão rodando e colocar aqui e no requirements
-colocar imagens base exemplo
-executar do 0 e ver se funciona com python3.11 ai podemos colocar python 3.8 and 3.11 tested
-opção de não usar a máscara, ou coloca uma máscara inteira preta só de referência
-
 The files here correspond to performing benchmarks with different deep learning models and measure inference time, as long as machine learning metrics for YOLOv8 to YOLOv11, as reported in the paper available at [arxiv](https://arxiv.org/abs/2412.01983) cited by: 
 
 ```
@@ -86,7 +80,7 @@ To execute the script, you need to provide some command-line arguments. Here’s
   - `debug`: Saves all figures generated during the process.
   - `no`: Does not save any figures.
   - `partial`: Saves only essential figures.
-- `--model`: YOLO model to be used, e.g., `yolov8n`, `yolov8x`, `yolov9t`, `yolov9x`, `yolov10n`, `yolov10x`,`yolo11n`,`yolo11x`. The model will be automatically downloaded.
+- `--model`: YOLO model to be used, e.g., `yolov8n`, `yolov8x`, `yolov9t`, `yolov9x`, `yolov10n`, `yolov10x`,`yolo11n`,`yolo11x`. The model will be automatically downloaded. You can also **Downloadsome  Pre-Trained model from our Google Drive Folder**: [Link](https://drive.google.com/drive/folders/1D_88IY0JBwUdi3EKsSAzLj1hxN6SJGit?usp=sharing)  
 
 
 ### Example usage:

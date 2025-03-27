@@ -44,7 +44,7 @@ This documentation covers the part that takes place inside the Raspberry Pi
 Before running the system, ensure you have the following files:  
 - **Mask File**: `mask_original_img_768_1024_bw.png` Defines the regions of interest for detection.  
 - **YOLOv11m (TFLite) Model**: The model used for car detection.  
-  - 📥 **Download from our Google Drive Folder Containing Models**: [Link](www)  
+  - 📥 **Download `yolo11m_float16.tflite` Pre-Trained model from our Google Drive Folder**: [Link](https://drive.google.com/drive/folders/1D_88IY0JBwUdi3EKsSAzLj1hxN6SJGit?usp=sharing)  
 - **InfluxDB Instance**: The system requires an active **InfluxDB** instance in the cloud. More information at [Setting Influx Section](../../software/influx/)
 
 ---
