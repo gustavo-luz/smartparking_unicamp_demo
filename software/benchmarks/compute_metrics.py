@@ -21,6 +21,11 @@ def load_data(base_dir_labeled_data, base_dir_inference_csvs,dataset):
         base_labeled_df = pd.read_csv(f'{base_dir_labeled_data}/labels_cnrpark.csv')
     elif dataset == 'ic2':
         base_labeled_df = pd.read_csv(f'{base_dir_labeled_data}/labels_ic2.csv')
+    else:
+        try:
+            base_labeled_df = pd.read_csv(f'{base_dir_labeled_data}/labels_{dataset}.csv')
+        except:
+            print('Dataset not found')
     
     dfs = []
     # print(base_dir_inference_csvs)
@@ -40,6 +45,8 @@ def process_data(combined_df, base_labeled_df,dataset):
         max_spots = 35
     elif dataset == 'ic2':
         max_spots = 16
+    else:
+        max_spots = input('Enter the maximum number of spots in the dataset: ')
     print(f'max spots is set to {dataset} parking: {max_spots}')
     if 'croped_' in base_labeled_df['image_name'].iloc[0]:
         input_continue = input('Do you want to continue? (y/n): ')

@@ -4,11 +4,6 @@
 
 This repository provides a script for running inference using a EfficientDet model in TensorFlow Lite format. The model is pre-trained on the COCO dataset with an input shape of 448X448. The environment setup follows the same requirements as the YOLO TFLite models.
 
-## TODOs
-- Add conversion steps for TFLite models following the provided link.
-- Provide a script to download demo images instead of distributing third-party images.
-- Cite the source of images in the associated research paper.
-
 ---
 
 ## Requirements

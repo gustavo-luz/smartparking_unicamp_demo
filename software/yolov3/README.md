@@ -6,9 +6,6 @@ This repository provides a script for running inference using a YOLO model in Te
 
 More info of this version at https://pjreddie.com/darknet/yolo/ and https://smartcampus.prefeitura.unicamp.br/pub/artigos_relatorios/PFG_Joao_Victor_Estacionamento_Inteligente.pdf
 
-## TODOs
-- Provide a script to download demo images instead of distributing third-party images.
-- Cite the source of images in the associated research paper.
 
 ---
 

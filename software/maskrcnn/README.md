@@ -6,10 +6,6 @@ This repository provides a script for running inference using a Mask R-CNN. The 
 
 This was not possible to execute at the Raspberry Pi 3B+.
 
-## TODOs
-- Provide a script to download demo images instead of distributing third-party images.
-- Cite the source of images in the associated research paper.
-
 ---
 
 ## Requirements

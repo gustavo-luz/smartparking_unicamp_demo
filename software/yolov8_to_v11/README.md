@@ -80,7 +80,6 @@ You can edit the mask using tools like **GIMP** or **Photoshop** to define custo
 
    Example test images can be found on [docs folder](../../assets/demo_images) extracted from [CNRPark](http://cnrpark.it/) named CNR-EXT_FULL_IMAGE_1000x750.tar (1.1 GB) and are from the under CNR-EXT_FULL_IMAGE_1000x750/FULL_IMAGE_1000x750/SUNNY/2015-11-12/camera1. The images used for the reference paper are in shape 728x1024 but other shapes should also be compatible.
 
-TODO: criar um script que baixa as fotos de demonstração e colocar em todos os readmes, pra não distribuir fotos de terceiros. add citação no artigo
 
 ## Running the Script
 
