@@ -1,7 +1,5 @@
 # Parking Availability Totem - Hardware Implementation
 
-[← Back to Main README](../README.md)
-
 ## Circuit Overview
 ![Figure 4: Totem Circuit Diagram](../../assets/docs/totem_schematic.png)
 
