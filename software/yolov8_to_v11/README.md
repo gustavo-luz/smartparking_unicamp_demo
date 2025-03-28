@@ -56,8 +56,20 @@ To create and activate a virtual environment, follow these steps:
 
 ### Required File
 
-Ensure that you have the following file before running the script:
-- **`maskmask_original_img_768_1024_bw.png`**: This file serves as a guideline to select regions where to perform counting. We provide an all-black mask, so every vehicle will be counted. To create a custom mask, you can a base image as an example. You can select and paint the desired counting region as black using image editing tools like GIMP with the free selection tool. The rest of the image should be left white.
+### Available Mask Files:
+- **`mask_original_img_768_1024_bw.png`**: A predefined mask that allows object counting in specific regions for IC2 images.
+- **`cnrpark_mask_original_img_1000_750_bw.png`**: A mask designed for the **CNRPark dataset**, with specific dimensions.
+- **`all_black_mask.png`**: A fully black mask that allows counting **all** cars in the image, with no region restrictions.
+
+### How Mask Files Work:
+The mask file is a **grayscale image** where:
+- **Black areas**: These regions are considered for counting.
+- **White areas**: These regions are ignored.
+
+If you want to count **all** vehicles in the image, use **`all_black_mask.png`**.
+
+### Modifying the Mask:
+You can edit the mask using tools like **GIMP** or **Photoshop** to define custom counting areas. Simply paint the regions where objects should be counted in **black**.
 
 ---
 
@@ -81,13 +93,13 @@ To execute the script, you need to provide some command-line arguments. Here’s
   - `no`: Does not save any figures.
   - `partial`: Saves only essential figures.
 - `--model`: YOLO model to be used, e.g., `yolov8n`, `yolov8x`, `yolov9t`, `yolov9x`, `yolov10n`, `yolov10x`,`yolo11n`,`yolo11x`. The model will be automatically downloaded. You can also **Downloadsome  Pre-Trained model from our Google Drive Folder**: [Link](https://drive.google.com/drive/folders/1D_88IY0JBwUdi3EKsSAzLj1hxN6SJGit?usp=sharing)  
-
+- `mask_file`: Selected desired mask file. Default is all black, or not use a mask.
 
 ### Example usage:
 
 
 ```
-python3 inference_yolo_ultralytics.py --input_path ../../assets/demo_images --output_path ../../assets/results/results_yolo_ultralytics/yolov8n --savefigs debug --model yolov8n
+python3 inference_yolo_ultralytics.py --input_path ../../assets/demo_images --output_path ../../assets/results/results_yolo_ultralytics/yolov8n --savefigs debug --model yolov8n --mask_file cnrpark_mask_original_img_1000_750_bw.png
 ```
 
 ---

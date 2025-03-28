@@ -11,9 +11,14 @@ from datetime import datetime
 
 MODEL = 'yolo11m_float16.tflite'
 IMAGE_DIR = '../../assets/demo_images'
-OUTPUT_DIR = '../../assets/results/results_yolo_tflite/yolov11m_tflite'
+OUTPUT_DIR = '../../assets/results/results_yolo_tflite_cnrpark/yolov11m_tflite'
 savefigs = 'debug' #choose 'no' to not save images and 'debug' to save images
+mask_file = 'cnrpark_mask_original_img_1000_750_bw.png' # 'mask_original_img_768_1024_bw.png' or 'cnrpark_mask_original_img_1000_750_bw.png' or 'all_black_mask.png' to count all cars
 """CFG END"""
+
+# IMAGE_DIR = '../../assets/original'
+# OUTPUT_DIR = '../../assets/results/results_yolov11mtflite_ic2/yolov11mtflite'
+
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 def nms(boxes, scores, iou_threshold=0.5):
@@ -168,7 +173,7 @@ output_details = interpreter.get_output_details()
 _, width, height, _ = input_details[0]['shape']
 type = input_details[0]['dtype']
 
-mask = Image.open('mask_original_img_768_1024_bw.png')
+mask = Image.open(mask_file)
 mask = np.array(mask)
 now = datetime.now()
 filename_timestamp = now.strftime("%Y%m%dT%H%M%S")

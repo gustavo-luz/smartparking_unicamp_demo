@@ -19,18 +19,20 @@ from utils import *
 import os
 # os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
-def main(model,input_path, output_path,num_splits,mask_type, savefigs='no', remove_intermediate_txt=False, generate_txt=True):
+def main(model,input_path, output_path,num_splits,mask_type, mask_file, savefigs='no', remove_intermediate_txts=False, generate_txt=False):
     
     if mask_type == 'post':
-        mask = iio.imread('mask_original_img_768_1024_bw.png')
+        mask = iio.imread(mask_file)
 
-
-    model = YOLO(f'{model}.pt')
+    try:
+        model = YOLO(f'{model}.pt')
+    except Exception as e:
+        print(f"Error loading model: {e}, trying to load tflite")
+        model = YOLO(f'{model}.tflite')
     # model.to('cpu')
     os.makedirs(output_path, exist_ok=True)
 
     savefigs = savefigs
-    remove_intermediate_txts = False
     show_processed_images = False
 
     filter_processed_images = 'no' # 'csv' or 'images' or anything else to dont filter and always process the same images
@@ -41,7 +43,6 @@ def main(model,input_path, output_path,num_splits,mask_type, savefigs='no', remo
     print(f'images list: {image_list}')
 
     interactive_mode = True
-    generate_txt = False
 
     if filter_processed_images == 'images':
 
@@ -210,7 +211,8 @@ if __name__ == '__main__':
     parser.add_argument('--savefigs', type=str, default='no', choices=['no', 'partial', 'debug'], help='Save figures options')
     parser.add_argument('--num_splits', type=int, default=1, help='Select number of splits in data')
     parser.add_argument('--mask_type', type=str, default="post", help='Select pre or post to masking method')
+    parser.add_argument('--mask_file', type=str, default="all_black_mask", help='Select name ofthe used mask')
 
     args = parser.parse_args()
 
-    main(args.model,args.input_path, args.output_path, num_splits=args.num_splits, mask_type=args.mask_type,savefigs=args.savefigs)
+    main(args.model,args.input_path, args.output_path, num_splits=args.num_splits, mask_type=args.mask_type,mask_file=args.mask_file,savefigs=args.savefigs)

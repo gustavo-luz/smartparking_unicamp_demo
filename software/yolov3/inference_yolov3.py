@@ -16,12 +16,14 @@ from datetime import datetime
 model_path = "yolov3.cfg"
 weights_path = "yolov3.weights"
 model = models.load_model(model_path, weights_path)
-# image_dir = '../../assets/demo_images'
-# output_dir = '../../assets/results/results_yolov3/yolov3'
-image_dir = '../../assets/original'
-output_dir = '../../assets/results/results_yolov3_ic2/yolov3_ic2'
+image_dir = '../../assets/demo_images'
+output_dir = '../../assets/results/results_yolov3_cnrpark/yolov3'
 savefigs = 'debug' #choose 'no' to not save images and 'debug' to save images
+mask_file = 'cnrpark_mask_resized_img_416_416_bw.png' # ''mask_original_img_416_416_bw.png' or 'cnrpark_mask_resized_img_416_416_bw.png' or 'all_black_mask.png' to count all cars
 """CFG END"""
+
+# image_dir = '../../assets/original'
+# output_dir = '../../assets/results/results_yolov3_ic2/yolov3_ic2'
 
 now = datetime.now()
 filename_timestamp = now.strftime("%Y%m%dT%H%M%S")
@@ -38,7 +40,7 @@ CAR_CLASS_ID = 2
 
 
 # with Image.open('mask_original_img_768_1024_bw.png') as mask:
-with Image.open('mask_original_img_416_416_bw.png') as mask:
+with Image.open(mask_file) as mask:
     # mask = mask.resize((640, 640))
     mask = np.array(mask)
 

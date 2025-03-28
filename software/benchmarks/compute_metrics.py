@@ -12,11 +12,16 @@ def parse_arguments():
     parser.add_argument("--base_dir_labeled_data", required=True, help="Base directory for labeled data")
     parser.add_argument("--base_dir_inference_csvs", required=True, help="Base directory for inference CSV files")
     parser.add_argument("--base_dir_results", required=True, help="Base directory to save results")
+    parser.add_argument("--dataset", required=True, help="Base directory to save results")
     return parser.parse_args()
 
-def load_data(base_dir_labeled_data, base_dir_inference_csvs):
+def load_data(base_dir_labeled_data, base_dir_inference_csvs,dataset):
     """Load labeled data and model predictions."""
-    base_labeled_df = pd.read_csv(f'{base_dir_labeled_data}/combined_metrics.csv')
+    if dataset == 'cnrpark':
+        base_labeled_df = pd.read_csv(f'{base_dir_labeled_data}/labels_cnrpark.csv')
+    elif dataset == 'ic2':
+        base_labeled_df = pd.read_csv(f'{base_dir_labeled_data}/labels_ic2.csv')
+    
     dfs = []
     # print(base_dir_inference_csvs)
     csv_files = glob.glob(os.path.join(base_dir_inference_csvs, '**', 'df_individual_metrics*.csv'), recursive=True)
@@ -28,20 +33,20 @@ def load_data(base_dir_labeled_data, base_dir_inference_csvs):
     combined_df = pd.concat(dfs, ignore_index=True)
     return base_labeled_df, combined_df
 
-def process_data(combined_df, base_labeled_df):
+def process_data(combined_df, base_labeled_df,dataset):
     """Process data and compute evaluation metrics."""
     print(base_labeled_df['image_name'].iloc[0])
-    if 'croped_' in base_labeled_df['image_name'].iloc[0]:
+    if dataset == 'cnrpark':
+        max_spots = 35
+    elif dataset == 'ic2':
         max_spots = 16
-        print(f'max spots is set to IC2 parking: {max_spots}')
+    print(f'max spots is set to {dataset} parking: {max_spots}')
+    if 'croped_' in base_labeled_df['image_name'].iloc[0]:
         input_continue = input('Do you want to continue? (y/n): ')
         if input_continue.lower() != 'y':
             exit()
         combined_df['image_name'] = 'croped_' + combined_df['image_name']
-        
     else:
-        max_spots = max(combined_df['predicted_cars'])
-        print(f'max spots is set to: {max_spots}')
         input_continue = input('Do you want to continue? (y/n): ')
         if input_continue.lower() != 'y':
             exit()
@@ -67,26 +72,11 @@ def process_data(combined_df, base_labeled_df):
 def calculate_metrics(df):
     """Calculate classification metrics."""
 
-    # df['TP'] = df.apply(lambda row: min(row['predicted_background'], row['real_background']), axis=1)
-
-    # df['FN'] = df.apply(lambda row: max(row['predicted_cars'] - row['real_cars'], 0), axis=1)
-
-    # df['FP'] = df.apply(lambda row: abs(row['predicted_background'] - row['real_background']), axis=1)
-    
-    # df['TN'] = df.apply(lambda row: min(row['predicted_cars'], row['real_cars']), axis=1)
-
-
     df['TP'] = df.apply(lambda row: min(row['predicted_background'], row['real_background']), axis=1)
     df['FN'] = df.apply(lambda row: max(row['predicted_cars'] - row['real_cars'], 0), axis=1)
     df['FP'] = df.apply(lambda row: abs(row['predicted_background'] - row['real_background']), axis=1)
     df['TN'] = df.apply(lambda row: min(row['predicted_cars'], row['real_cars']), axis=1)
 
-    # df['TP'] = df.apply(lambda row: min(row['predicted_background'], row['real_background']), axis=1)
-    # df['TN'] = df.apply(lambda row: min(row['predicted_cars'], row['real_cars']), axis=1)
-    # df['FP'] = df.apply(lambda row: max(row['predicted_background'] - row['real_background'], 0), axis=1)
-    # df['FN'] = df.apply(lambda row: max(row['real_background'] - row['predicted_background'], 0), axis=1)
-
-        
     # Accuracy, recall, precision, F1 score
     df['accuracy'] = (df['TP'] + df['TN']) / (df['TP'] + df['TN'] + df['FP'] + df['FN'])
     df['recall'] = df['TP'] / (df['TP'] + df['FN'])
@@ -178,8 +168,8 @@ def save_confusion_matrix(df, base_dir_results, model, suffix=""):
 
 def main():
     args = parse_arguments()
-    base_labeled_df, combined_df = load_data(args.base_dir_labeled_data, args.base_dir_inference_csvs)
-    merged_df = process_data(combined_df, base_labeled_df)
+    base_labeled_df, combined_df = load_data(args.base_dir_labeled_data, args.base_dir_inference_csvs,args.dataset)
+    merged_df = process_data(combined_df, base_labeled_df,args.dataset)
     
     # Save results for all images
     summarize_metrics(merged_df, args.base_dir_results, args.model, suffix="all")

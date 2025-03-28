@@ -11,9 +11,14 @@ from datetime import datetime
 """CFG START"""
 MODEL = 'lite-model_efficientdet_lite2_detection_default_1.tflite'
 IMAGE_DIR = '../../assets/demo_images'
-OUTPUT_DIR = '../../assets/results/results_efficientdet_tflite/efficientdetd2lite'
+OUTPUT_DIR = '../../assets/results/results_efficientdet_tflite_cnrpark/efficientdetd2lite_cnrpark'
 savefigs = 'debug' #choose 'no' to not save images and 'debug' to save images
+mask_file = 'cnrpark_mask_original_img_1000_750_bw.png' # 'mask_original_img_768_1024_bw.png' or 'cnrpark_mask_original_img_1000_750_bw.png' or 'all_black_mask.png' to count all cars
 """CFG END"""
+
+
+# IMAGE_DIR = '../../assets/original'
+# OUTPUT_DIR = '../../assets/results/results_efficientdet_tflite_ic2/efficientdetd2lite_ic2'
 
 now = datetime.now()
 filename_timestamp = now.strftime("%Y%m%dT%H%M%S")
@@ -199,8 +204,7 @@ output_details = interpreter.get_output_details()
 _, width, height, _ = input_details[0]['shape']
 type = input_details[0]['dtype']
 print(f"width: {width}, height: {height}")
-
-mask = Image.open('mask_original_img_768_1024_bw.png')
+mask = Image.open(mask_file)
 mask = np.array(mask)
 
 with open(OUTPUT_FILE, 'w', newline='') as csvfile:
@@ -213,6 +217,7 @@ with open(OUTPUT_FILE, 'w', newline='') as csvfile:
 
             with Image.open(image_path) as img_object:
                 img_width, img_height = img_object.size
+                # print(img_width, img_height)
                 num_cars, boxes,inf_time = count_cars(process_image(img_object), 0.25,mask)
                 print(f"Number of cars detected: {num_cars}")
 
@@ -224,6 +229,7 @@ with open(OUTPUT_FILE, 'w', newline='') as csvfile:
                     image_name = f'annotated_{filename}'
                     annotated_image_path = os.path.join(output_csv_path, image_name)
                     annotated_image.save(annotated_image_path)
+                    # img_object.save(os.path.join(output_csv_path, f'raw_{image_name}'))
                     print(f"Annotated image saved to {annotated_image_path}")
 
                 cpu_usage = psutil.cpu_percent()

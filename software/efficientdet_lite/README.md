@@ -46,9 +46,24 @@ Ensure that Python is installed. The script has been tested with Python 3.11.7 a
 
 ## Required Files
 
-Before running the script, ensure you have:
-- **`mask_original_img_768_1024_bw.png`**: This mask file defines regions where object counting is performed. The default mask is all black, meaning every vehicle will be counted. You can modify it using image editing tools (e.g., GIMP) by selecting and painting the desired regions in black.
-- **Efficientdet Model**: The model used for car detection.  
+Before running the script, ensure you have the correct **mask file** to define the counting regions
+
+### Available Mask Files:
+- **`mask_original_img_768_1024_bw.png`**: A predefined mask that allows object counting in specific regions for IC2 images.
+- **`cnrpark_mask_original_img_1000_750_bw.png`**: A mask designed for the **CNRPark dataset**, with specific dimensions.
+- **`all_black_mask.png`**: A fully black mask that allows counting **all** cars in the image, with no region restrictions.
+
+### How Mask Files Work:
+The mask file is a **grayscale image** where:
+- **Black areas**: These regions are considered for counting.
+- **White areas**: These regions are ignored.
+
+If you want to count **all** vehicles in the image, use **`all_black_mask.png`**.
+
+### Modifying the Mask:
+You can edit the mask using tools like **GIMP** or **Photoshop** to define custom counting areas. Simply paint the regions where objects should be counted in **black**.
+
+You need to have an **Efficientdet Model**: The model used for car detection.  
   - 📥 **Download `lite-model_efficientdet_lite2_detection_default_1.tflite` Pre-Trained model from our Google Drive Folder**: [Link](https://drive.google.com/drive/folders/1D_88IY0JBwUdi3EKsSAzLj1hxN6SJGit?usp=sharing)  
 ---
 
@@ -74,9 +89,10 @@ MODEL = 'lite-model_efficientdet_lite2_detection_default_1.tflite'
 IMAGE_DIR = '../../assets/demo_images'
 OUTPUT_DIR = '../../assets/results/results_efficientdet_tflite/efficientdetd2lite'
 savefigs = 'debug'  
+mask_file= 'cnrpark_mask_original_img_1000_750_bw.png' 
 ```
 
-Make sure `MODEL`, `IMAGE_DIR`, and `OUTPUT_DIR` are correctly defined before executing the script. The `savefigs` variable should be set to `'debug'` if you want to save images or `'no'` if you prefer not to save them.
+Make sure `MODEL`, `IMAGE_DIR`, `mask_file` and `OUTPUT_DIR` are correctly defined before executing the script. The `savefigs` variable should be set to `'debug'` if you want to save images or `'no'` if you prefer not to save them. 
 
 
 

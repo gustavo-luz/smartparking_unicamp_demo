@@ -22,11 +22,13 @@ class SimpleConfig(mrcnn.config.Config):
 model = mrcnn.model.MaskRCNN(mode="inference", config=SimpleConfig(), model_dir=os.getcwd())
 model.load_weights(filepath="mask_rcnn_coco.h5", by_name=True)
 input_dir = '../../assets/demo_images'
-OUTPUT_DIR = '../../assets/results/results_maskrcnn/markrcnn'
+OUTPUT_DIR = '../../assets/results/results_maskrcnn_cnrpark/markrcnn_cnrpark'
 savefigs = 'debug' #choose 'no' to not save images and 'debug' to save images
-mask_path = "mask_original_img_768_1024_bw.png"
+mask_file = 'cnrpark_mask_original_img_1000_750_bw.png' # 'mask_original_img_768_1024_bw.png' or 'cnrpark_mask_original_img_1000_750_bw.png' or 'all_black_mask.png' to count all cars
 """CFG END"""
 
+# input_dir = '../../assets/original'
+# OUTPUT_DIR = '../../assets/results/results_maskrcnn_ic2/markrcnn_ic2'
 
 
 now = datetime.now()
@@ -44,7 +46,7 @@ os.makedirs(output_csv_path, exist_ok=True)
 CLASS_NAMES = ['BG', 'person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'train', 'truck', 'boat', 'traffic light', 'fire hydrant', 'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog', 'horse', 'sheep', 'cow', 'elephant', 'bear', 'zebra', 'giraffe', 'backpack', 'umbrella', 'handbag', 'tie', 'suitcase', 'frisbee', 'skis', 'snowboard', 'sports ball', 'kite', 'baseball bat', 'baseball glove', 'skateboard', 'surfboard', 'tennis racket', 'bottle', 'wine glass', 'cup', 'fork', 'knife', 'spoon', 'bowl', 'banana', 'apple', 'sandwich', 'orange', 'broccoli', 'carrot', 'hot dog', 'pizza', 'donut', 'cake', 'chair', 'couch', 'potted plant', 'bed', 'dining table', 'toilet', 'tv', 'laptop', 'mouse', 'remote', 'keyboard', 'cell phone', 'microwave', 'oven', 'toaster', 'sink', 'refrigerator', 'book', 'clock', 'vase', 'scissors', 'teddy bear', 'hair drier', 'toothbrush']
 
 data = []
-mask = iio.imread(mask_path)
+mask = iio.imread(mask_file)
 
 def detection_matrix_modified(x, y, mask, img_width, img_height):
     if len(mask.shape) == 3:
